@@ -17,11 +17,23 @@ class Event < ApplicationRecord
   size: { less_than_or_equal_to: 10.megabytes },
   dimension: { width: { max: 2000 }, height: { max: 2000 }}
 
+  searchkick language: "japanese"
+
   def created_by?(user)
     return false unless user
     owner_id == user.id
   end
 
+  def search_data
+    {
+      name: name,
+      place: place,
+      content: content,
+      owner_name: owner&.name,
+      start_at: start_at
+    }
+  end
+  
   private
 
   def start_at_should_be_before_end_at
